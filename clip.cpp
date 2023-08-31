@@ -50,8 +50,8 @@ CLIP::CLIP()
 
     net.opt = opt;
     net.register_custom_layer("Gather", Gather_layer_creator);
-    net.load_param("assets/clip.param");
-    net.load_model("assets/clip.bin");
+    net.load_param("/home/loongson/nmh/code/qtXMU/ncnn_clip/assets/clip.param");
+    net.load_model("/home/loongson/nmh/code/qtXMU/ncnn_clip/assets/clip.bin");
 
     std::ifstream infile;
     std::string pathname = "assets/vocab.txt";
