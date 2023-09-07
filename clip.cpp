@@ -103,8 +103,9 @@ void show(ncnn::Mat in)
     std::cout << "dim:" << in.dims << "(" << C << "," << H << "," << W << ")sum:" << s << std::endl;
 }
 
-void CLIP::encode_image(cv::Mat image, cv::Mat& feat)
+cv::Mat CLIP::encode_image(cv::Mat image)
 {
+    cv::Mat feat;
     cv::resize(image, image, cv::Size(224, 224));
     ncnn::Mat in = ncnn::Mat::from_pixels(image.data, ncnn::Mat::PIXEL_RGB, image.cols, image.rows);
     in.substract_mean_normalize(mean_vals, norm_vals);
@@ -131,7 +132,12 @@ void CLIP::encode_image(cv::Mat image, cv::Mat& feat)
 
     cv::Mat ifeat(1, 1024, CV_32FC1, (void*)image_features);
 
+    // cv::Mat tmp = ifeat.clone();
+
+    // feat = tmp;
+
     feat = ifeat.clone();
+    return feat;
 }
 
 void CLIP::encode_text(std::string text, cv::Mat& feat)

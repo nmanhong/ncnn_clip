@@ -25,9 +25,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->extractFeat->setEnabled(false);
     ui->go->setEnabled(false);
     clip = new CLIP();
-    connect(ui->chooseImageFolder, &QPushButton::clicked, this, &MainWindow::on_chooseImageFolder_clicked);
-    connect(ui->extractFeat, &QPushButton::clicked, this, &MainWindow::on_extractFeat_clicked);
-    connect(ui->go, &QPushButton::clicked, this, &MainWindow::on_go_clicked);
+//    connect(ui->chooseImageFolder, &QPushButton::clicked, this, &MainWindow::on_chooseImageFolder_clicked);
+//    connect(ui->extractFeat, &QPushButton::clicked, this, &MainWindow::on_extractFeat_clicked);
+//    connect(ui->go, &QPushButton::clicked, this, &MainWindow::on_go_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -53,7 +53,8 @@ void MainWindow::on_chooseImageFolder_clicked()
 
 void MainWindow::on_extractFeat_clicked()
 {
-    std::vector<cv::Mat> image_features_stack(gallery.length());
+    // std::vector<cv::Mat> image_features_stack(gallery.length());
+    std::vector<cv::Mat> image_features_stack;
     for (int i = 0; i < gallery.length(); i++)
     {
         QString qtF = gallery[i];
@@ -61,7 +62,10 @@ void MainWindow::on_extractFeat_clicked()
         cv::Mat image = cv::imread(cvF);
         cv::cvtColor(image, image, cv::COLOR_BGR2RGB);
         qDebug() << "encoding image: " << qtF;
-        clip->encode_image(image, image_features_stack[i]);
+        //cv::Mat tmp;
+        //tmp.release();
+        cv::Mat tmp = clip->encode_image(image);
+        image_features_stack.push_back(tmp);
     }
     cv::vconcat(image_features_stack, image_features);
     ui->go->setEnabled(true);
