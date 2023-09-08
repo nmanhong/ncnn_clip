@@ -21,8 +21,8 @@ class CLIP
 public:
     CLIP();
     
-    // void encode_image(cv::Mat image, cv::Mat& feat);
-    cv::Mat encode_image(cv::Mat image);
+    void encode_image(cv::Mat image, cv::Mat& feat);
+    //cv::Mat encode_image(cv::Mat image);
     void encode_text(std::string text, cv::Mat& feat);
     void encode_text(std::vector<int> text, cv::Mat& feat);
 

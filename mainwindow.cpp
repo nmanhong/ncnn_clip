@@ -53,8 +53,8 @@ void MainWindow::on_chooseImageFolder_clicked()
 
 void MainWindow::on_extractFeat_clicked()
 {
-    // std::vector<cv::Mat> image_features_stack(gallery.length());
-    std::vector<cv::Mat> image_features_stack;
+    std::vector<cv::Mat> image_features_stack(gallery.length());
+    //std::vector<cv::Mat> image_features_stack;
     for (int i = 0; i < gallery.length(); i++)
     {
         QString qtF = gallery[i];
@@ -64,8 +64,8 @@ void MainWindow::on_extractFeat_clicked()
         qDebug() << "encoding image: " << qtF;
         //cv::Mat tmp;
         //tmp.release();
-        cv::Mat tmp = clip->encode_image(image);
-        image_features_stack.push_back(tmp);
+        clip->encode_image(image, image_features_stack[i]);
+        //image_features_stack.push_back(tmp);
     }
     cv::vconcat(image_features_stack, image_features);
     ui->go->setEnabled(true);

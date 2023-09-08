@@ -103,32 +103,32 @@ void show(ncnn::Mat in)
     std::cout << "dim:" << in.dims << "(" << C << "," << H << "," << W << ")sum:" << s << std::endl;
 }
 
-cv::Mat CLIP::encode_image(cv::Mat image)
+void CLIP::encode_image(cv::Mat image, cv::Mat& feat)
 {
-    cv::Mat feat;
+    // cv::Mat feat;
     cv::resize(image, image, cv::Size(224, 224));
     ncnn::Mat in = ncnn::Mat::from_pixels(image.data, ncnn::Mat::PIXEL_RGB, image.cols, image.rows);
     in.substract_mean_normalize(mean_vals, norm_vals);
 
     ncnn::Mat image_features;
-    {
-        ncnn::Mat subout;
-        ncnn::Extractor ex = net.create_extractor();
-        ex.input(".\\encode_image-fp16/0", in);
-        ex.extract(".\\encode_image-fp16/652", subout);
-        image_features = ncnn::Mat(1024, subout.row(0));
-    }
+    //{
+    ncnn::Mat subout;
+    ncnn::Extractor ex = net.create_extractor();
+    ex.input(".\\encode_image-fp16/0", in);
+    ex.extract(".\\encode_image-fp16/652", subout);
+    image_features = ncnn::Mat(1024, subout.row(0));
+    //}
 
-    {
-        float norm = 0.f;
-        for (int i = 0; i < 1024; i++) {
-            norm += image_features[i] * image_features[i];
-        }
-        norm = std::sqrt(norm);
-        for (int i = 0; i < 1024; i++) {
-            image_features[i] /= norm;
-        }
+    //{
+    float norm = 0.f;
+    for (int i = 0; i < 1024; i++) {
+        norm += image_features[i] * image_features[i];
     }
+    norm = std::sqrt(norm);
+    for (int i = 0; i < 1024; i++) {
+        image_features[i] /= norm;
+    }
+    //}
 
     cv::Mat ifeat(1, 1024, CV_32FC1, (void*)image_features);
 
@@ -137,7 +137,7 @@ cv::Mat CLIP::encode_image(cv::Mat image)
     // feat = tmp;
 
     feat = ifeat.clone();
-    return feat;
+//    return feat;
 }
 
 void CLIP::encode_text(std::string text, cv::Mat& feat)
